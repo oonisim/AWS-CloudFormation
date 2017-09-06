@@ -956,7 +956,6 @@
         "EC2DefaultRoutePrivateDB": {
             "Type": "AWS::EC2::Route",
             "Properties": {
-                "CidrBlock": "10.0.3.0/24",
                 "DestinationCidrBlock": "0.0.0.0/0",
                 "InstanceId": {
                     "Ref": "EC2NatGw"
@@ -1232,8 +1231,7 @@
                     "4bd0bba9-5e78-4c11-a80a-44bc057a8506",
                     "6005af7d-db95-47c8-a406-e0ec05ecfd17",
                     "0165ade8-fb88-4629-8f35-900f70c7ad06",
-                    "3ee679d7-6555-4da0-989c-fce66e862e5f",
-                    "01274f31-4b9e-488a-b442-a5fe18ddf210"
+                    "3ee679d7-6555-4da0-989c-fce66e862e5f"
                 ]
             },
             "e517471e-5e98-4d71-a974-069ab0bdc6fe": {
@@ -1621,7 +1619,7 @@
                     "y": 460
                 },
                 "z": 2,
-                "parent": "cd58a77b-408a-40ee-99d1-e521bb8e7204",
+                "parent": "9925d36c-c017-4bbe-9dff-d8e27b4371f1",
                 "embeds": [],
                 "isassociatedwith": [
                     "4a248794-df25-47ef-99c5-aba8d0cb309d"
@@ -1706,7 +1704,9 @@
                     "y": 640
                 },
                 "z": 0,
-                "embeds": [],
+                "embeds": [
+                    "01274f31-4b9e-488a-b442-a5fe18ddf210"
+                ],
                 "isassociatedwith": [
                     "cd58a77b-408a-40ee-99d1-e521bb8e7204",
                     "6005af7d-db95-47c8-a406-e0ec05ecfd17",
