@@ -184,7 +184,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-vpc"
+                        "Value": "vpc"
                     }
                 ]
             },
@@ -210,7 +210,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-subnet"
+                        "Value": "subnet"
                     },
                     {
                         "Key": "subnet-type",
@@ -233,7 +233,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-gateway"
+                        "Value": "gateway"
                     }
                 ]
             },
@@ -268,7 +268,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-routetable"
+                        "Value": "routetable"
                     },
                     {
                         "Key": "routetable-type",
@@ -331,13 +331,13 @@
                 }
             }
         },
-        "VCTSNatSecurityGroup": {
+        "EC2SecurityGroupNAT": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-sg"
+                        "Value": "sg"
                     }
                 ],
                 "GroupDescription": "NAT (External) VCTS security group",
@@ -405,7 +405,9 @@
                         "AMI"
                     ]
                 },
-                "InstanceType": "t2.micro",
+                "InstanceType": {
+                    "Ref": "InstanceType"
+                },
                 "KeyName": {
                     "Ref": "KeyPair"
                 },
@@ -415,13 +417,13 @@
                 "SourceDestCheck": false,
                 "SecurityGroupIds": [
                     {
-                        "Ref": "VCTSNatSecurityGroup"
+                        "Ref": "EC2SecurityGroupNAT"
                     }
                 ],
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-natgw"
+                        "Value": "natgw"
                     }
                 ],
                 "UserData": {
@@ -503,7 +505,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-elb"
+                        "Value": "elb"
                     }
                 ]
             },
@@ -542,7 +544,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-srv"
+                        "Value": "srv"
                     }
                 ],
                 "UserData": {
@@ -554,7 +556,7 @@
                                 "/usr/bin/yum -y update\n",
                                 "/usr/bin/yum -y install httpd\n",
                                 "/sbin/chkconfig httpd on\n",
-                                "echo '<html><head></head><body>vcts-lab-srv1</body></html>' > /var/www/html/index.html\n",
+                                "echo '<html><head></head><body>srv1</body></html>' > /var/www/html/index.html\n",
                                 "echo \"/opt/aws/bin/cfn-signal -e $? ",
                                 "  --stack ",
                                 {
@@ -619,7 +621,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-srv"
+                        "Value": "srv"
                     }
                 ],
                 "UserData": {
@@ -631,7 +633,7 @@
                                 "/usr/bin/yum -y update\n",
                                 "/usr/bin/yum -y install httpd\n",
                                 "/sbin/chkconfig httpd on\n",
-                                "echo '<html><head></head><body>vcts-lab-srv2</body></html>' > /var/www/html/index.html\n",
+                                "echo '<html><head></head><body>srv2</body></html>' > /var/www/html/index.html\n",
                                 "echo \"/opt/aws/bin/cfn-signal -e $? ",
                                 "  --stack ",
                                 {
@@ -675,7 +677,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-subnet"
+                        "Value": "subnet"
                     },
                     {
                         "Key": "subnet-type",
@@ -725,7 +727,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-sg"
+                        "Value": "sg"
                     }
                 ],
                 "GroupDescription": "Private (Internal) security group",
@@ -789,7 +791,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-routetable"
+                        "Value": "routetable"
                     },
                     {
                         "Key": "routetable-type",
@@ -1005,7 +1007,7 @@
                 "Tags": [
                     {
                         "Key": "resclass",
-                        "Value": "vcts-lab-sg"
+                        "Value": "sg"
                     }
                 ],
                 "GroupDescription": "ELB (load balancer) security group",
