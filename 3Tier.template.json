@@ -572,12 +572,6 @@
                     }
                 }
             },
-            "CreationPolicy": {
-                "ResourceSignal": {
-                    "Count": 1,
-                    "Timeout": "PT10M"
-                }
-            },
             "DependsOn": [
                 "EC2NatGw"
             ],
@@ -648,12 +642,6 @@
                             ]
                         ]
                     }
-                }
-            },
-            "CreationPolicy": {
-                "ResourceSignal": {
-                    "Count": 1,
-                    "Timeout": "PT10M"
                 }
             },
             "DependsOn": [
