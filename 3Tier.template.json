@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "vancluevertech.com CloudFormation intro template",
+    "Description": "CloudFormation 3 tier architecture template",
     "Parameters": {
         "KeyPair": {
             "Type": "AWS::EC2::KeyPair::KeyName",
