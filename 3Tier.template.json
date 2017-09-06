@@ -432,7 +432,7 @@
                             "",
                             [
                                 "#!/bin/bash -xe\n",
-                                "/usr/bin/yum -y update\n",
+                                "/usr/bin/apt-get -y update\n",
                                 "echo \"/opt/aws/bin/cfn-signal -e $? ",
                                 "  --stack ",
                                 {
@@ -451,12 +451,6 @@
                             ]
                         ]
                     }
-                }
-            },
-            "CreationPolicy": {
-                "ResourceSignal": {
-                    "Count": 1,
-                    "Timeout": "PT10M"
                 }
             },
             "Metadata": {
@@ -553,9 +547,10 @@
                             "",
                             [
                                 "#!/bin/bash -xe\n",
-                                "/usr/bin/yum -y update\n",
-                                "/usr/bin/yum -y install httpd\n",
-                                "/sbin/chkconfig httpd on\n",
+                                "/usr/bin/apt-get -y update\n",
+                                "/usr/bin/apt-get -y install apache2\n",
+                                "systemctl enable apache2\n",
+                                "systemctl start apache2\n",
                                 "echo '<html><head></head><body>srv1</body></html>' > /var/www/html/index.html\n",
                                 "echo \"/opt/aws/bin/cfn-signal -e $? ",
                                 "  --stack ",
@@ -630,9 +625,10 @@
                             "",
                             [
                                 "#!/bin/bash -xe\n",
-                                "/usr/bin/yum -y update\n",
-                                "/usr/bin/yum -y install httpd\n",
-                                "/sbin/chkconfig httpd on\n",
+                                "/usr/bin/apt-get -y update\n",
+                                "/usr/bin/apt-get -y install apache2\n",
+                                "systemctl enable apache2\n",
+                                "systemctl start apache2\n",
                                 "echo '<html><head></head><body>srv2</body></html>' > /var/www/html/index.html\n",
                                 "echo \"/opt/aws/bin/cfn-signal -e $? ",
                                 "  --stack ",
