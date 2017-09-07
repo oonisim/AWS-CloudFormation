@@ -3,19 +3,20 @@
     "Description": "CloudFormation template for 3 tier example",
     "Parameters": {
         "KeyPair": {
-            "Type": "AWS::EC2::KeyPair::KeyName",
             "Description": "SSH key that will be used for EC2 instances (set up in web console)",
+            "Type": "AWS::EC2::KeyPair::KeyName",
             "ConstraintDescription": "needs to be an existing EC2 keypair (set up in web console)"
         },
         "SSHAllowIPAddress": {
+            "Description": "IP address to allow SSH from (only /32s allowed)",
+            "Default": "203.30.93.21/32",
             "Type": "String",
             "AllowedPattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/32",
-            "Description": "IP address to allow SSH from (only /32s allowed)",
             "ConstraintDescription": "needs to be in A.B.C.D/32 form"
         },
         "DBName": {
-            "Default": "myDatabase",
             "Description": "MySQL database name",
+            "Default": "myDatabase",
             "Type": "String",
             "MinLength": "1",
             "MaxLength": "64",
@@ -23,8 +24,9 @@
             "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
         },
         "DBUser": {
-            "NoEcho": "true",
             "Description": "Username for MySQL database access",
+            "NoEcho": "false",
+            "Default": "admin",
             "Type": "String",
             "MinLength": "1",
             "MaxLength": "16",
@@ -32,8 +34,8 @@
             "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
         },
         "DBPassword": {
-            "NoEcho": "true",
             "Description": "Password for MySQL database access",
+            "NoEcho": "true",
             "Type": "String",
             "MinLength": "8",
             "MaxLength": "41",
@@ -41,8 +43,8 @@
             "ConstraintDescription": "must contain only alphanumeric characters."
         },
         "DBAllocatedStorage": {
-            "Default": "5",
             "Description": "The size of the database (Gb)",
+            "Default": "5",
             "Type": "Number",
             "MinValue": "5",
             "MaxValue": "1024",
@@ -87,8 +89,8 @@
             "ConstraintDescription": "must select a valid database instance type."
         },
         "MultiAZDatabase": {
-            "Default": "true",
             "Description": "Create a Multi-AZ MySQL Amazon RDS database instance",
+            "Default": "true",
             "Type": "String",
             "AllowedValues": [
                 "true",
@@ -156,6 +158,9 @@
             "us-east-1": {
                 "AMI": "ami-1ecae776"
             },
+            "us-east-2": {
+                "AMI": "ami-ea87a78f"
+            },
             "us-west-1": {
                 "AMI": "ami-e7527ed7"
             },
@@ -166,6 +171,9 @@
         "NatRegionMap": {
             "us-east-1": {
                 "AMI": "ami-303b1458"
+            },
+            "us-east-2": {
+                "AMI": "ami-07fdd962"
             },
             "us-west-1": {
                 "AMI": "ami-7da94839"
@@ -705,7 +713,7 @@
                                 "/usr/bin/yum -y update\n",
                                 "/usr/bin/yum -y install httpd\n",
                                 "/sbin/chkconfig httpd on\n",
-                                "echo '<html><head></head><body>ec2-srv1</body></html>' > /var/www/html/index.html\n",
+                                "echo '<html><head></head><body>You are accessing <b>InstanceWeb01</b> server via ELB</body></html>' > /var/www/html/index.html\n",
                                 "echo \"/opt/aws/bin/cfn-signal -e $? ",
                                 "  --stack ",
                                 {
@@ -780,7 +788,7 @@
                                 "/usr/bin/yum -y update\n",
                                 "/usr/bin/yum -y install httpd\n",
                                 "/sbin/chkconfig httpd on\n",
-                                "echo '<html><head></head><body>ec2-srv2</body></html>' > /var/www/html/index.html\n",
+                                "echo '<html><head></head><body>You are accessing <b>InstanceWeb02</b> server via ELB</body></html>' > /var/www/html/index.html\n",
                                 "echo \"/opt/aws/bin/cfn-signal -e $? ",
                                 "  --stack ",
                                 {
@@ -916,8 +924,25 @@
                 },
                 "SecurityGroupIngress": [
                     {
-                        "IpProtocol": "-1",
-                        "CidrIp": "0.0.0.0/0"
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "SourceSecurityGroupId": {
+                            "Ref": "SecurityGroupWeb"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "SourceSecurityGroupId": {
+                            "Ref": "SecurityGroupWeb"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22"
                     }
                 ],
                 "SecurityGroupEgress": [
@@ -930,25 +955,6 @@
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "71773925-e115-4e42-9c37-8f0e72d6199a"
-                }
-            }
-        },
-        "RDSDBSG3DOLV": {
-            "Type": "AWS::RDS::DBSubnetGroup",
-            "Properties": {
-                "DBSubnetGroupDescription" : "Subnet group for the RDS DBInstance",
-                "SubnetIds": [
-                    {
-                        "Ref": "SubnetDBAZ0"
-                    },
-                    {
-                        "Ref": "SubnetDBAZ1"
-                    }
-                ]
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "f0c7c1e3-67cf-47ad-981b-0859e7ffa51b"
                 }
             }
         },
@@ -1061,6 +1067,180 @@
                     "id": "e617f29c-4dcb-4f81-83df-7d42d38d472f"
                 }
             }
+        },
+        "SecurityGroupDB": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "resclass",
+                        "Value": "ec2-sg"
+                    }
+                ],
+                "GroupDescription": "Private (Internal) App security group",
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3306",
+                        "ToPort": "3306",
+                        "SourceSecurityGroupId": {
+                            "Ref": "SecurityGroupApp"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "SourceSecurityGroupId": {
+                            "Ref": "SecurityGroupApp"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22"
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "-1",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "52f42c37-6ce1-4264-b6a0-4efb8ffa0f6d"
+                }
+            }
+        },
+        "RDSDB": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "DBSubnetGroupName": {
+                    "Ref": "RDSDBSubnetGroup"
+                },
+                "Engine": "MySQL",
+                "DBName": {
+                    "Ref": "DBName"
+                },
+                "MultiAZ": {
+                    "Ref": "MultiAZDatabase"
+                },
+                "MasterUsername": {
+                    "Ref": "DBUser"
+                },
+                "MasterUserPassword": {
+                    "Ref": "DBPassword"
+                },
+                "DBInstanceClass": {
+                    "Ref": "DBInstanceClass"
+                },
+                "AllocatedStorage": {
+                    "Ref": "DBAllocatedStorage"
+                },
+                "VPCSecurityGroups": [
+                    {
+                        "Ref": "SecurityGroupDB"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "32e96478-2633-4b88-a85c-95a8f94a344b"
+                }
+            },
+            "DependsOn": [
+                "RDSDBSubnetGroup"
+            ]
+        },
+        "RDSDBSubnetGroup": {
+            "Type": "AWS::RDS::DBSubnetGroup",
+            "Properties": {
+                "DBSubnetGroupDescription": "Subnet group for the RDS DBInstance",
+                "SubnetIds": [
+                    {
+                        "Ref": "SubnetDBAZ0"
+                    },
+                    {
+                        "Ref": "SubnetDBAZ1"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "f0c7c1e3-67cf-47ad-981b-0859e7ffa51b"
+                }
+            }
+        },
+        "InstanceApp01": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "InstanceType": {
+                    "Ref": "InstanceType"
+                },
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "RegionMap",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "AMI"
+                    ]
+                },
+                "KeyName": {
+                    "Ref": "KeyPair"
+                },
+                "SubnetId": {
+                    "Ref": "SubnetApp"
+                },
+                "SecurityGroupIds": [
+                    {
+                        "Ref": "SecurityGroupApp"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "f441774d-adcf-4dcb-8227-1e9fab9e2c29"
+                }
+            }
+        },
+        "InstanceApp02": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "InstanceType": {
+                    "Ref": "InstanceType"
+                },
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "RegionMap",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "AMI"
+                    ]
+                },
+                "KeyName": {
+                    "Ref": "KeyPair"
+                },
+                "SubnetId": {
+                    "Ref": "SubnetApp"
+                },
+                "SecurityGroupIds": [
+                    {
+                        "Ref": "SecurityGroupApp"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5db99b8e-d48d-427f-8320-f295c9d965b9"
+                }
+            }
         }
     },
     "Outputs": {
@@ -1109,8 +1289,8 @@
                     "height": 60
                 },
                 "position": {
-                    "x": -30,
-                    "y": 880
+                    "x": 250,
+                    "y": 1050
                 },
                 "z": 1,
                 "embeds": []
@@ -1128,10 +1308,11 @@
                 "embeds": [
                     "54f3aa33-bbcc-4a6e-911b-a55a0c41791b",
                     "51970057-2b76-47e6-ab16-cbb22d344be7",
-                    "71773925-e115-4e42-9c37-8f0e72d6199a",
                     "0abda415-2b53-4450-ac5c-b739556cb45e",
                     "cf4ccac9-8c4b-495b-96a2-69c607813625",
                     "263376fb-3676-4183-8447-104c00c9a6b3",
+                    "71773925-e115-4e42-9c37-8f0e72d6199a",
+                    "52f42c37-6ce1-4264-b6a0-4efb8ffa0f6d",
                     "20e318b7-0304-4a5b-a47d-1b52c45b67a8",
                     "16463556-7147-40c9-a464-acf0d5de3277",
                     "fe410015-5578-4f52-92ce-b5b095b954f7",
@@ -1243,7 +1424,7 @@
                 },
                 "position": {
                     "x": 390,
-                    "y": 680
+                    "y": 690
                 },
                 "z": 2,
                 "parent": "916208cf-303b-4fdd-b034-c2b0ab079880",
@@ -1258,7 +1439,7 @@
                 },
                 "position": {
                     "x": 420,
-                    "y": 740
+                    "y": 750
                 },
                 "z": 3,
                 "parent": "d6f7512b-42b7-426c-a7e8-9cd4d2b0ee84",
@@ -1299,7 +1480,7 @@
                 },
                 "position": {
                     "x": 430,
-                    "y": 170
+                    "y": 160
                 },
                 "z": 2,
                 "parent": "916208cf-303b-4fdd-b034-c2b0ab079880",
@@ -1318,7 +1499,7 @@
                 },
                 "position": {
                     "x": 460,
-                    "y": 230
+                    "y": 220
                 },
                 "z": 3,
                 "parent": "d2d2c3ea-bf8b-4d66-8a65-7c3f9e71156e",
@@ -1337,7 +1518,7 @@
                 },
                 "position": {
                     "x": 580,
-                    "y": 230
+                    "y": 220
                 },
                 "z": 3,
                 "parent": "d2d2c3ea-bf8b-4d66-8a65-7c3f9e71156e",
@@ -1355,8 +1536,8 @@
                     "height": 60
                 },
                 "position": {
-                    "x": -120,
-                    "y": 460
+                    "x": 170,
+                    "y": 400
                 },
                 "z": 1,
                 "embeds": [],
@@ -1382,12 +1563,15 @@
                     "height": 60
                 },
                 "position": {
-                    "x": 850,
-                    "y": 320
+                    "x": 800,
+                    "y": 210
                 },
                 "z": 2,
                 "parent": "916208cf-303b-4fdd-b034-c2b0ab079880",
-                "embeds": []
+                "embeds": [],
+                "isrelatedto": [
+                    "263376fb-3676-4183-8447-104c00c9a6b3"
+                ]
             },
             "0abda415-2b53-4450-ac5c-b739556cb45e": {
                 "size": {
@@ -1410,12 +1594,15 @@
                     "height": 220
                 },
                 "position": {
-                    "x": 950,
-                    "y": 190
+                    "x": 960,
+                    "y": 180
                 },
                 "z": 2,
                 "parent": "916208cf-303b-4fdd-b034-c2b0ab079880",
-                "embeds": [],
+                "embeds": [
+                    "5db99b8e-d48d-427f-8320-f295c9d965b9",
+                    "f441774d-adcf-4dcb-8227-1e9fab9e2c29"
+                ],
                 "isrelatedto": [
                     "d6f7512b-42b7-426c-a7e8-9cd4d2b0ee84"
                 ]
@@ -1456,7 +1643,9 @@
                 },
                 "z": 2,
                 "parent": "916208cf-303b-4fdd-b034-c2b0ab079880",
-                "embeds": [],
+                "embeds": [
+                    "32e96478-2633-4b88-a85c-95a8f94a344b"
+                ],
                 "isassociatedwith": [
                     "6ff2fa16-3b63-4975-a142-7f27192a407a",
                     "51970057-2b76-47e6-ab16-cbb22d344be7"
@@ -1468,7 +1657,7 @@
                     "height": 200
                 },
                 "position": {
-                    "x": 1430,
+                    "x": 1380,
                     "y": 200
                 },
                 "z": 2,
@@ -1547,7 +1736,102 @@
                 "target": {
                     "id": "6ff2fa16-3b63-4975-a142-7f27192a407a"
                 },
+                "z": 2
+            },
+            "52f42c37-6ce1-4264-b6a0-4efb8ffa0f6d": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 1290,
+                    "y": 200
+                },
+                "z": 2,
+                "parent": "916208cf-303b-4fdd-b034-c2b0ab079880",
+                "embeds": [],
+                "isrelatedto": [
+                    "263376fb-3676-4183-8447-104c00c9a6b3",
+                    "71773925-e115-4e42-9c37-8f0e72d6199a"
+                ]
+            },
+            "32e96478-2633-4b88-a85c-95a8f94a344b": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 1480,
+                    "y": 270
+                },
+                "z": 3,
+                "parent": "f0c7c1e3-67cf-47ad-981b-0859e7ffa51b",
+                "embeds": [],
+                "isassociatedwith": [
+                    "52f42c37-6ce1-4264-b6a0-4efb8ffa0f6d"
+                ],
+                "dependson": [
+                    "f0c7c1e3-67cf-47ad-981b-0859e7ffa51b"
+                ]
+            },
+            "f441774d-adcf-4dcb-8227-1e9fab9e2c29": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 1000,
+                    "y": 230
+                },
+                "z": 3,
+                "parent": "42fff9a8-5a27-452b-a24f-eec60a33f04d",
+                "embeds": [],
+                "isassociatedwith": [
+                    "71773925-e115-4e42-9c37-8f0e72d6199a"
+                ]
+            },
+            "5db99b8e-d48d-427f-8320-f295c9d965b9": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 1000,
+                    "y": 320
+                },
+                "z": 3,
+                "parent": "42fff9a8-5a27-452b-a24f-eec60a33f04d",
+                "embeds": [],
+                "isassociatedwith": [
+                    "71773925-e115-4e42-9c37-8f0e72d6199a"
+                ]
+            },
+            "e1ca826e-ab70-4405-a4bc-69b048eac787": {
+                "source": {
+                    "id": "f441774d-adcf-4dcb-8227-1e9fab9e2c29"
+                },
+                "target": {
+                    "id": "71773925-e115-4e42-9c37-8f0e72d6199a"
+                },
                 "z": 4
+            },
+            "fb8cbb0f-f988-4d1d-92f9-6d2c08a169cf": {
+                "source": {
+                    "id": "5db99b8e-d48d-427f-8320-f295c9d965b9"
+                },
+                "target": {
+                    "id": "71773925-e115-4e42-9c37-8f0e72d6199a"
+                },
+                "z": 5
+            },
+            "74a6c24d-9e61-4abb-86c1-cd7e187095de": {
+                "source": {
+                    "id": "32e96478-2633-4b88-a85c-95a8f94a344b"
+                },
+                "target": {
+                    "id": "f0c7c1e3-67cf-47ad-981b-0859e7ffa51b"
+                },
+                "z": 6
             }
         }
     }
