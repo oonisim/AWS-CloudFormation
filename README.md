@@ -30,7 +30,7 @@ Stack Creation
 **US EAST** regions need to be used.
 
 1. In the CloudFormation, [create a new stack](https://us-east-2.console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new).
-2. Uplooad the [DL3Tier.awscf.json[(https://github.com/oonisim/AWS-CloudFormation/blob/master/DL3Tier.awscf.json) template file.
+2. Uplooad the [DL3Tier.awscf.json](https://github.com/oonisim/AWS-CloudFormation/blob/master/DL3Tier.awscf.json) template file.
 3. Provide the parameters. KeyPair is the AWS key pair name for the SSH logins to the instances.
 
 ![alt text](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/DL.parameters.png)
