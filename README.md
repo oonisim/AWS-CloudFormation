@@ -43,8 +43,8 @@ Stack Creation
 
 Verification
 ---------------------
-1. Go to the AWS EC2 console.
-2. From the navigation pane on the left, select Load Balancer to get the ELB URL.
+1. Go to the AWS EC2 console in the region where the stack has been created.
+2. In the navigation pane on the left, select Load Balancer to get the ELB URL.
 ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELBDNS.png)
 
 3. Access the ELB URL from the Web browser.
@@ -56,8 +56,8 @@ Session Affinity is not configured yet for ELB testing purpose. Keep accessing a
     Web 02 server:<br>
     ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELB2Web02.png)
 
-4. Copy the SSH private key of the Key Pair to the NAT instance to be able to SSH into other instances.
-5. SSH login to the NAT instance with the Key Pair.
+4. From the EC2 instances view, get the NAT instance public IP (only instance to which a public IP is assigned).
+5. Copy the SSH private key of the Key Pair to the NAT instance to be able to SSH into other instances. SSH login to the NAT instance with the Key Pair.
 
     <pre><code>
     oonisim@:~/.ssh$ scp ec2.pem ec2-user@13.59.1.71:~/.ssh/
