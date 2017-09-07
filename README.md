@@ -1,4 +1,4 @@
-# AWS-CloudFormation template for 3 tier system.
+# AWS-CloudFormation (CF) template for 3 tier system.
 
 References
 ---------------------
@@ -11,7 +11,7 @@ References
 
 Overview
 ---------------------
-3 tier system with the front-end Elastic Load Balancer spraying the requests to two web servers. Then Web -> App -> DB.
+CF template to create a sample 3 tier system with the front-end Elastic Load Balancer spraying the requests to two web servers.
 
 * Security Groups are filtering accesses between the layers with inbound/outbound rules.
 * Connections from inside the VPC go through the NAT gateway, hence no direct IP/socket exposures.
