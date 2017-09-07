@@ -49,7 +49,45 @@ Session Affinity is not configured yet. Keep accessing and will see the differen
     Web 02 server:<br>
     ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELB2Web02.png)
 
+4. Copy the SSH private key of the Key Pair to the NAT instance to be able to SSH into other instances.
+5. SSH login to the NAT instance with the Key Pair.
+6. Run "sudo yum -y update to verify HTTP/S outbound rules are configured as expected."
+
+    [ec2-user@ip-10-0-0-198 ~]$ ssh 10.0.2.156  <--- SSH login to an App instance.
+
+           __|  __|_  )
+           _|  (     /   Amazon Linux AMI
+          ___|\___|___|
+
+    https://aws.amazon.com/amazon-linux-ami/2017.03-release-notes/
+
+    [ec2-user@ip-10-0-2-156 ~]$ sudo yum update
+    Loaded plugins: priorities, update-motd, upgrade-helper
+    amzn-main                                                                                                                                                                                    | 2.1 kB  00:00:00
+    amzn-updates                                                                                                                                                                                 | 2.3 kB  00:00:00
+    (1/5): amzn-main/latest/group                                                                                                                                                                |  35 kB  00:00:00
+    (2/5): amzn-updates/latest/group                                                                                                                                                             |  35 kB  00:00:00
+    (3/5): amzn-updates/latest/updateinfo                                                                                                                                                        | 414 kB  00:00:00
+    (4/5): amzn-main/latest/primary_db                                                                                                                                                           | 3.6 MB  00:00:00
+    (5/5): amzn-updates/latest/primary_db                                                                                                                                                        | 672 kB  00:00:00
+    Resolving Dependencies
+    --> Running transaction check
+    ...
+
+7. Verify the MySQL RDS instance from the RDS console.
+    ![MySQL](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/RDSInsance.png)
+
+8. Verify the MySQL connection (port 3306) is open from an App instance.
+
+    [ec2-user@ip-10-0-2-156 ~]$ telnet drs41f9esu2lp7.cfebzse2r1lv.us-east-2.rds.amazonaws.com 3306
+    Trying 10.0.4.222...
+    Connected to drs41f9esu2lp7.cfebzse2r1lv.us-east-2.rds.amazonaws.com.
+    Escape character is '^]'.
+
+
+
 Notes
 ---------------------
 AWS Linux AMI is used for the EC2 instances.
+
 
