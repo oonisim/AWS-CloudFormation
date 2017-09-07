@@ -29,16 +29,17 @@ Use **US EAST** regions.
 
 ![alt text](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/DL.parameters.png)
 
+4. Confirm the successful completion.
+
+    Note the ELB resource created in the CloudFormation execution status Resources tab to get the ELB URL later.
+
+    ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/CF.Status.Resources.png)
 
 Verification
 ---------------------
 1. Go to the AWS EC2 console.
 2. From the navigation pane on the left, select Load Balancer to get the ELB URL.
 ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELBDNS.png)
-
-    Alternatively, identify the ELB resource created from the CloudFormation execution status Resources tab.
-
-    ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/CF.Status.Resources.png)
 
 3. Access the ELB URL from the Web browser.
 Session Affinity is not configured yet. Keep accessing and will see the different web servers are getting accessed.
