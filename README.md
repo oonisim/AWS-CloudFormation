@@ -53,12 +53,12 @@ Session Affinity is not configured yet. Keep accessing and will see the differen
 5. SSH login to the NAT instance with the Key Pair.
 6. Run "sudo yum -y update to verify HTTP/S outbound rules are configured as expected."
 
+    <pre><code>
     [ec2-user@ip-10-0-0-198 ~]$ ssh 10.0.2.156  <--- SSH login to an App instance.
 
            __|  __|_  )
            _|  (     /   Amazon Linux AMI
           ___|\___|___|
-    <code>
     https://aws.amazon.com/amazon-linux-ami/2017.03-release-notes/
 
     [ec2-user@ip-10-0-2-156 ~]$ sudo yum update
@@ -73,18 +73,18 @@ Session Affinity is not configured yet. Keep accessing and will see the differen
     Resolving Dependencies
     --> Running transaction check
     ...
-    </code>
+    </code></pre>
 
 7. Verify the MySQL RDS instance from the RDS console.
     ![MySQL](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/RDSInsance.png)
 
 8. Verify the MySQL connection (port 3306) is open from an App instance.
-    <code>
+    <pre><code>
     [ec2-user@ip-10-0-2-156 ~]$ telnet drs41f9esu2lp7.cfebzse2r1lv.us-east-2.rds.amazonaws.com 3306
     Trying 10.0.4.222...
     Connected to drs41f9esu2lp7.cfebzse2r1lv.us-east-2.rds.amazonaws.com.
     Escape character is '^]'.
-    </code>
+    </code></pre>
 
 
 Notes
