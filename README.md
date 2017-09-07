@@ -4,9 +4,10 @@ References
 ---------------------
 
 * [AWS Basics Using CloudFormation (Reference Demo)](https://github.com/vancluever/aws-basics-using-cloudformation)
-* [AWS Resource Types Reference](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
+* [NAT Instances](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html)
 * [Working with an Amazon RDS DB Instance in a VPC](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html)
 * [RDS with Cloud Formation and AZ issues](https://stackoverflow.com/questions/33722394/rds-with-cloud-formation-and-az-issues)
+* [AWS Resource Types Reference](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
 
 Overview
 ---------------------
