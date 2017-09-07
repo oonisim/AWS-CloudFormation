@@ -10,7 +10,11 @@ References
 
 Overview
 ---------------------
-3 tier system with the front-end Elastic Load Balancer spraying the requests to two web servers. Then Web -> App -> DB. Access to the gateway, load balancer -> web, web -> app, app -> db are filtered with the security groups configurations with inbound/outbound rules.
+3 tier system with the front-end Elastic Load Balancer spraying the requests to two web servers. Then Web -> App -> DB.
+
+* Security Groups are filtering accesses between the layers with inbound/outbound rules.
+* Connections from inside the VPC go through the NAT gateway, hence no direct IP/socket exposures.
+* NAT Gateway functions as the jump box into the instances in the VPC.
 
 ![alt text](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/DL.png)
 
