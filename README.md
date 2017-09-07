@@ -102,6 +102,6 @@ Session Affinity is not configured yet for ELB testing purpose. Keep accessing a
 
 Notes
 ---------------------
-AWS Linux AMI is used for the EC2 instances.
+AWS Linux AMI is used for the EC2 instances. The account name is 'ec2-user'.
 
 
