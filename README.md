@@ -48,7 +48,7 @@ Verification
 ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELBDNS.png)
 
 3. Access the ELB URL from the Web browser.
-Session Affinity is not configured yet. Keep accessing and will see the different web servers are getting accessed.
+Session Affinity is not configured yet for ELB testing purpose. Keep accessing and will see the different web servers are getting accessed.
 
     Web 01 server:<br>
     ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELB2Web01.png)
