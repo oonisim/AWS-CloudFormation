@@ -13,15 +13,18 @@ Overview
 ---------------------
 CF template to create a sample 3 tier system with the front-end Elastic Load Balancer spraying the requests to two web servers.
 
-* Security Groups are filtering accesses between the layers with inbound/outbound rules.
-* Connections from inside the VPC go through the NAT gateway, hence no direct IP/socket exposures.
-* NAT Gateway functions as the jump box into the instances in the VPC.
+* All instances are contained in a VPC. Only HTTP/S and SSH are allowed.
+* Security Groups filters connections between the layers with inbound/outbound rules.
+* Connections from inside the VPC can go only through the NAT gateway, hence no direct IP/socket exposures.
+* NAT Gateway functions as the jump box (only SSH from a specified IP allowed) to the instances in the VPC.
+
+Unless the known defaults (e.g 3306 for MySQL port), all configurable values are parameterised. HTTP/S outbound access is allowed from the instances via the NAT gateway.
 
 ![alt text](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/DL.png)
 
 Stack Creation
 ---------------------
-Use **US EAST** regions.
+**US EAST** regions need to be used.
 
 1. In the CloudFormation, [create a new stack](https://us-east-2.console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new).
 2. Uplooad the DL3Tier.awscf.json template file.
@@ -52,6 +55,12 @@ Session Affinity is not configured yet. Keep accessing and will see the differen
 
 4. Copy the SSH private key of the Key Pair to the NAT instance to be able to SSH into other instances.
 5. SSH login to the NAT instance with the Key Pair.
+
+    <pre><code>
+    oonisim@:~/.ssh$ scp id_rsa ec2-user@13.59.1.71:~/.ssh/
+    oonisim@:~/.ssh$ ssh ec2-user@13.59.1.71
+    </code></pre>
+
 6. Run "sudo yum -y update to verify HTTP/S outbound rules are configured as expected."
 
     <pre><code>
