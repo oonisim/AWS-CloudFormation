@@ -32,20 +32,18 @@ Use **US EAST** regions.
 Verification
 ---------------------
 1. Go to the AWS EC2 console.
-2. From the navigation pane on the left, select Load Balancer.
+2. From the navigation pane on the left, select Load Balancer to get the ELB URL.
 ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELBDNS.png)
 
     Alternatively, identify the ELB resource created from the CloudFormation execution status Resources tab.
 
     ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/CF.Status.Resources.png)
 
-3. Copy the DNS name of the ELB and access from the Web browser.
-Session Affinity is not configured yet. keep accessing and will see the different web servers are getting accessed.
+3. Access the ELB URL from the Web browser.
+Session Affinity is not configured yet. Keep accessing and will see the different web servers are getting accessed.
 
-    Web 01 server:
-
+    Web 01 server:<br>
     ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELB2Web01.png)
 
     Web 02 server:<br>
-
     ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELB2Web02.png)
