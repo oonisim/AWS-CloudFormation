@@ -14,6 +14,48 @@
             "AllowedPattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/32",
             "ConstraintDescription": "needs to be in A.B.C.D/32 form"
         },
+        "CIDRBlockVPC": {
+            "Description": "CIDR block for VPC (only /16s allowed)",
+            "Default": "10.0.0.0/16",
+            "Type": "String",
+            "AllowedPattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/16",
+            "ConstraintDescription": "needs to be in A.B.C.D/16 form"
+        },
+        "CIDRBlockNAT": {
+            "Description": "CIDR block for VPC (only /24s allowed)",
+            "Default": "10.0.0.0/24",
+            "Type": "String",
+            "AllowedPattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/16",
+            "ConstraintDescription": "needs to be in A.B.C.D/24 form"
+        },
+        "CIDRBlockWeb": {
+            "Description": "CIDR block for VPC (only /24s allowed)",
+            "Default": "10.0.1.0/24",
+            "Type": "String",
+            "AllowedPattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/16",
+            "ConstraintDescription": "needs to be in A.B.C.D/24 form"
+        },
+        "CIDRBlockApp": {
+            "Description": "CIDR block for VPC (only /24s allowed)",
+            "Default": "10.0.2.0/24",
+            "Type": "String",
+            "AllowedPattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/16",
+            "ConstraintDescription": "needs to be in A.B.C.D/24 form"
+        },
+        "CIDRBlockDB0": {
+            "Description": "CIDR block for VPC (only /24s allowed)",
+            "Default": "10.0.3.0/24",
+            "Type": "String",
+            "AllowedPattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/16",
+            "ConstraintDescription": "needs to be in A.B.C.D/24 form"
+        },
+        "CIDRBlockDB1": {
+            "Description": "CIDR block for VPC (only /24s allowed)",
+            "Default": "10.0.4.0/24",
+            "Type": "String",
+            "AllowedPattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/16",
+            "ConstraintDescription": "needs to be in A.B.C.D/24 form"
+        },
         "DBName": {
             "Description": "MySQL database name",
             "Default": "myDatabase",
@@ -187,7 +229,7 @@
         "VPC": {
             "Type": "AWS::EC2::VPC",
             "Properties": {
-                "CidrBlock": "10.0.0.0/16",
+                "CidrBlock": { "Ref": "CIDRBlockVPC" },
                 "EnableDnsHostnames": true,
                 "Tags": [
                     {
@@ -202,10 +244,10 @@
                 }
             }
         },
-        "SubnetPublic": {
+        "SubnetNAT": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
-                "CidrBlock": "10.0.0.0/24",
+                "CidrBlock": { "Ref": "CIDRBlockNAT" },
                 "MapPublicIpOnLaunch": true,
                 "Tags": [
                     {
@@ -238,7 +280,7 @@
         "SubnetWeb": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
-                "CidrBlock": "10.0.1.0/24",
+                "CidrBlock": { "Ref": "CIDRBlockWeb" },
                 "MapPublicIpOnLaunch": false,
                 "Tags": [
                     {
@@ -255,7 +297,7 @@
                 },
                 "AvailabilityZone": {
                     "Fn::GetAtt": [
-                        "SubnetPublic",
+                        "SubnetNAT",
                         "AvailabilityZone"
                     ]
                 }
@@ -342,7 +384,7 @@
             "Type": "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "SubnetId": {
-                    "Ref": "SubnetPublic"
+                    "Ref": "SubnetNAT"
                 },
                 "RouteTableId": {
                     "Ref": "RouteTablePublic"
@@ -426,13 +468,37 @@
                 "SecurityGroupIngress": [
                     {
                         "IpProtocol": "tcp",
-                        "CidrIp": "10.0.1.0/24",
+                        "CidrIp": { "Ref": "CIDRBlockWeb" },
                         "FromPort": "80",
                         "ToPort": "80"
                     },
                     {
                         "IpProtocol": "tcp",
-                        "CidrIp": "10.0.1.0/24",
+                        "CidrIp": { "Ref": "CIDRBlockWeb" },
+                        "FromPort": "443",
+                        "ToPort": "443"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "CidrIp": { "Ref": "CIDRBlockApp" },
+                        "FromPort": "80",
+                        "ToPort": "80"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "CidrIp": { "Ref": "CIDRBlockApp" },
+                        "FromPort": "443",
+                        "ToPort": "443"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "CidrIp": { "Ref": "CIDRBlockDB0" },
+                        "FromPort": "80",
+                        "ToPort": "80"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "CidrIp": { "Ref": "CIDRBlockDB0" },
                         "FromPort": "443",
                         "ToPort": "443"
                     },
@@ -571,7 +637,7 @@
                     "Ref": "KeyPair"
                 },
                 "SubnetId": {
-                    "Ref": "SubnetPublic"
+                    "Ref": "SubnetNAT"
                 },
                 "SourceDestCheck": false,
                 "SecurityGroupIds": [
@@ -645,7 +711,7 @@
                 "Scheme": "internet-facing",
                 "Subnets": [
                     {
-                        "Ref": "SubnetPublic"
+                        "Ref": "SubnetNAT"
                     }
                 ],
                 "SecurityGroups": [
@@ -840,7 +906,7 @@
                 }
             }
         },
-        "DefautRootApp": {
+        "DefautRouteApp": {
             "Type": "AWS::EC2::Route",
             "Properties": {
                 "DestinationCidrBlock": "0.0.0.0/0",
@@ -883,7 +949,7 @@
         "SubnetApp": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
-                "CidrBlock": "10.0.2.0/24",
+                "CidrBlock": { "Ref": "CIDRBlockApp" },
                 "MapPublicIpOnLaunch": false,
                 "Tags": [
                     {
@@ -900,7 +966,7 @@
                 },
                 "AvailabilityZone": {
                     "Fn::GetAtt": [
-                        "SubnetPublic",
+                        "SubnetNAT",
                         "AvailabilityZone"
                     ]
                 }
@@ -943,6 +1009,7 @@
                     },
                     {
                         "IpProtocol": "tcp",
+                        "CidrIp": "0.0.0.0/0",
                         "FromPort": "22",
                         "ToPort": "22"
                     }
@@ -980,7 +1047,7 @@
         "SubnetDBAZ0": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
-                "CidrBlock": "10.0.3.0/24",
+                "CidrBlock": { "Ref": "CIDRBlockDB0" },
                 "MapPublicIpOnLaunch": false,
                 "Tags": [
                     {
@@ -997,7 +1064,7 @@
                 },
                 "AvailabilityZone": {
                     "Fn::GetAtt": [
-                        "SubnetPublic",
+                        "SubnetNAT",
                         "AvailabilityZone"
                     ]
                 }
@@ -1011,7 +1078,7 @@
         "SubnetDBAZ1": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
-                "CidrBlock": "10.0.4.0/24",
+                "CidrBlock": { "Ref": "CIDRBlockDB1" },
                 "MapPublicIpOnLaunch": false,
                 "Tags": [
                     {
@@ -1079,7 +1146,7 @@
                         "Value": "ec2-sg"
                     }
                 ],
-                "GroupDescription": "Private (Internal) App security group",
+                "GroupDescription": "Private (Internal) DB security group",
                 "VpcId": {
                     "Ref": "VPC"
                 },
@@ -1094,14 +1161,7 @@
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "443",
-                        "ToPort": "443",
-                        "SourceSecurityGroupId": {
-                            "Ref": "SecurityGroupApp"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
+                        "CidrIp": "0.0.0.0/0",
                         "FromPort": "22",
                         "ToPort": "22"
                     }
