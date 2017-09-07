@@ -13,12 +13,15 @@ Overview
 ---------------------
 CF template to create a sample 3 tier system with the front-end Elastic Load Balancer spraying the requests to two web servers.
 
+* Front end access is load balanced with the Elastic Load Balancer (ELB).
+* Front end High Availability (HA) is with the web cluster and session affinity.
 * All instances are contained in a VPC. Only HTTP/S and SSH are allowed.
 * Security Groups filters connections between the layers with inbound/outbound rules.
 * Connections from inside the VPC can go only through the NAT gateway, hence no direct IP/socket exposures.
 * NAT Gateway functions as the jump box (only SSH from a specified IP allowed) to the instances in the VPC.
+* Unless the known defaults (e.g 3306 for MySQL port), all configurable values are parameterised. <BR>
 
-Unless the known defaults (e.g 3306 for MySQL port), all configurable values are parameterised. HTTP/S outbound access is allowed from the instances via the NAT gateway.
+HTTP/S outbound accesses are allowed from the instances for the package installations via yum (apt). An internal package repository should be setup, however for the sample system.
 
 ![alt text](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/DL.png)
 
