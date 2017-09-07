@@ -32,15 +32,16 @@ Verification
 ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELBDNS.png)
 
     Alternatively, from the CloudFormation execution status Resources tab, identify the ELB resource created, and follow the link.
+
     ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/CF.Status.Resources.png)
 
 3. Copy the DNS name of the ELB and access from the Web browser.
 Session Affinity is not configured yet. keep accessing and will see the different web servers are getting accessed.
 
-Web 01 server:
+    Web 01 server:
 
-![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELB2Web01.png)
+    ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELB2Web01.png)
 
-Web 02 server:
+    Web 02 server:<br>
 
-![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELB2Web02.png)
+    ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELB2Web02.png)
