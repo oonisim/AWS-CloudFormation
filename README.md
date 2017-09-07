@@ -31,7 +31,7 @@ Verification
 2. From the navigation pane on the left, select Load Balancer.
 ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELBDNS.png)
 
-    Alternatively, from the CloudFormation execution status Resources tab, identify the ELB resource created, and follow the link.
+    Alternatively, identify the ELB resource created from the CloudFormation execution status Resources tab.
 
     ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/CF.Status.Resources.png)
 
