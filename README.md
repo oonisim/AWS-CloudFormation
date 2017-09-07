@@ -47,3 +47,8 @@ Session Affinity is not configured yet. Keep accessing and will see the differen
 
     Web 02 server:<br>
     ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELB2Web02.png)
+
+Notes
+---------------------
+AWS Linux AMI is used for the EC2 instances.
+

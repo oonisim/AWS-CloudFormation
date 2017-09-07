@@ -564,7 +564,9 @@
                         "AMI"
                     ]
                 },
-                "InstanceType": "t2.micro",
+                "InstanceType": {
+                    "Ref": "InstanceType"
+                },
                 "KeyName": {
                     "Ref": "KeyPair"
                 },
