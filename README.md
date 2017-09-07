@@ -2,15 +2,16 @@
 
 References
 ---------------------
-https://github.com/vancluever/aws-basics-using-cloudformation
-
-Author
----------------------
-Masayuki Onishi (modifed the original in reference)
+[AWS Basics Using CloudFormation (Reference Demo)](https://github.com/vancluever/aws-basics-using-cloudformation)
+[AWS Resource Types Reference](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
+[Working with an Amazon RDS DB Instance in a VPC](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html)
+[RDS with Cloud Formation and AZ issues](https://stackoverflow.com/questions/33722394/rds-with-cloud-formation-and-az-issues)
 
 Overview
 ---------------------
-ELB (Elastic Load Balancer x 2) -> Web -> App -> DB
+ELB (Elastic Load Balancer x 2) -> Web -> App -> DB.
+
+* Access to the gateway, load balancer -> web, web -> app, app -> db are filtered with the security groups configurations with inbound/outbound rules.
 
 ![alt text](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/DL.png)
 
