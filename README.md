@@ -88,7 +88,7 @@ Session Affinity is not configured yet for ELB testing purpose. Keep accessing a
     ...
     </code></pre>
 
-7. Verify the MySQL RDS instance from the RDS console.
+7. Verify the MySQL RDS instance and its hostname from the RDS console.
     ![MySQL](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/RDSInsance.png)
 
 8. Verify the MySQL connection (port 3306) is open from an App instance.
