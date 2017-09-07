@@ -35,7 +35,7 @@ Stack Creation
 
 ![alt text](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/DL.parameters.png)
 
-4. Confirm the successful completion.
+4. Run the creation and confirm the successful completion. It can take a while.
 
     Note the ELB resource created in the CloudFormation execution status Resources tab to get the ELB URL later.
 
