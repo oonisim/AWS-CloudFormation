@@ -57,7 +57,7 @@ Session Affinity is not configured yet. Keep accessing and will see the differen
 5. SSH login to the NAT instance with the Key Pair.
 
     <pre><code>
-    oonisim@:~/.ssh$ scp id_rsa ec2-user@13.59.1.71:~/.ssh/
+    oonisim@:~/.ssh$ scp ec2.pem ec2-user@13.59.1.71:~/.ssh/
     oonisim@:~/.ssh$ ssh ec2-user@13.59.1.71
     </code></pre>
 
