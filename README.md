@@ -43,9 +43,17 @@ Stack Creation
 
     ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/CF.Status.Resources.png)
 
+5. Confirm the information of the front-end access in the Output tab of the Cloud Formation console.
+
+    ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/CFOutputs.png)
+
+
 Verification
 ---------------------
 1. Go to the AWS EC2 console in the region where the stack has been created.
+
+![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/EC2Instances.png)
+
 2. In the navigation pane on the left, select Load Balancer to get the ELB URL.
 ![](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/ELBDNS.png)
 
