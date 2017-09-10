@@ -340,7 +340,7 @@
                 }
             }
         },
-        "RouteTablePublic": {
+        "RouteTableNAT": {
             "Type": "AWS::EC2::RouteTable",
             "Properties": {
                 "VpcId": {
@@ -363,7 +363,7 @@
                 }
             }
         },
-        "DefaultRoutePublic": {
+        "DefaultRouteNAT": {
             "Type": "AWS::EC2::Route",
             "Properties": {
                 "DestinationCidrBlock": "0.0.0.0/0",
@@ -371,7 +371,7 @@
                     "Ref": "VPCGateway"
                 },
                 "RouteTableId": {
-                    "Ref": "RouteTablePublic"
+                    "Ref": "RouteTableNAT"
                 }
             },
             "Metadata": {
@@ -380,14 +380,14 @@
                 }
             }
         },
-        "SubnetToRouteTablePublic": {
+        "SubnetToRouteTableNAT": {
             "Type": "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "SubnetId": {
                     "Ref": "SubnetNAT"
                 },
                 "RouteTableId": {
-                    "Ref": "RouteTablePublic"
+                    "Ref": "RouteTableNAT"
                 }
             },
             "Metadata": {
@@ -647,6 +647,10 @@
                 ],
                 "Tags": [
                     {
+                        "Key": "Name",
+                        "Value": "InstanceNAT"
+                    },
+                    {
                         "Key": "resclass",
                         "Value": "ec2-natgw"
                     }
@@ -768,8 +772,11 @@
                 ],
                 "Tags": [
                     {
+                        "Key": "Name",
+                        "Value": "InstanceWeb01"
+                    },{
                         "Key": "resclass",
-                        "Value": "ec2-srv"
+                        "Value": "ec2-instance"
                     }
                 ],
                 "UserData": {
@@ -843,8 +850,11 @@
                 ],
                 "Tags": [
                     {
+                        "Key": "Name",
+                        "Value": "InstanceWeb02"
+                    },{
                         "Key": "resclass",
-                        "Value": "ec2-srv"
+                        "Value": "ec2-instance"
                     }
                 ],
                 "UserData": {
@@ -1241,6 +1251,15 @@
         "InstanceApp01": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "InstanceApp01"
+                    },{
+                        "Key": "resclass",
+                        "Value": "ec2-instance"
+                    }
+                ],
                 "InstanceType": {
                     "Ref": "InstanceType"
                 },
@@ -1274,6 +1293,15 @@
         "InstanceApp02": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "InstanceApp02"
+                    },{
+                        "Key": "resclass",
+                        "Value": "ec2-instance"
+                    }
+                ],
                 "InstanceType": {
                     "Ref": "InstanceType"
                 },
@@ -1306,8 +1334,8 @@
         }
     },
     "Outputs": {
-        "NatIPAddr": {
-            "Description": "IP address of the NAT instance (shell to this address)",
+        "IPAddrNAT": {
+            "Description": "Publilc IP address of the NAT instance (SSH to this address)",
             "Value": {
                 "Fn::GetAtt": [
                     "InstanceNAT",
@@ -1315,8 +1343,8 @@
                 ]
             }
         },
-        "Srv1IPAddr": {
-            "Description": "IP address of srv1 (internal)",
+        "IPAddrWeb01": {
+            "Description": "IP address of Web01 (internal)",
             "Value": {
                 "Fn::GetAtt": [
                     "InstanceWeb01",
@@ -1324,8 +1352,8 @@
                 ]
             }
         },
-        "Srv2IPAddr": {
-            "Description": "IP address of srv2 (internal)",
+        "IPAddrWeb02": {
+            "Description": "IP address of Web02 (internal)",
             "Value": {
                 "Fn::GetAtt": [
                     "InstanceWeb02",
@@ -1333,8 +1361,8 @@
                 ]
             }
         },
-        "ELBDNSName": {
-            "Description": "DNS host for the ELB",
+        "DNSNameELB": {
+            "Description": "DNS name for the ELB URL",
             "Value": {
                 "Fn::GetAtt": [
                     "ELB",

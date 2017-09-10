@@ -31,7 +31,9 @@ Stack Creation
 
 1. In the CloudFormation, [create a new stack](https://us-east-2.console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new).
 2. Uplooad the [DL3Tier.awscf.json](https://github.com/oonisim/AWS-CloudFormation/blob/master/DL3Tier.awscf.json) template file.
-3. Provide the parameters. KeyPair is the AWS key pair name for the SSH logins to the instances.
+3. Provide the parameters. <br>
+   KeyPair is the AWS key pair name for the SSH logins to the instances.<br>
+   SSH is only allowed from the SSHAllowIPAddress (or modify the Security Group form the AWS console).<br>
 
 ![alt text](https://github.com/oonisim/AWS-CloudFormation/blob/master/snapshots/DL.parameters.png)
 
@@ -94,6 +96,8 @@ Session Affinity is not configured yet for ELB testing purpose. Keep accessing a
 8. Verify the MySQL connection (port 3306) is open from an App instance.
     <pre><code>
     [ec2-user@ip-10-0-2-156 ~]$ telnet drs41f9esu2lp7.cfebzse2r1lv.us-east-2.rds.amazonaws.com 3306
+
+
     Trying 10.0.4.222...
     Connected to drs41f9esu2lp7.cfebzse2r1lv.us-east-2.rds.amazonaws.com.
     Escape character is '^]'.
